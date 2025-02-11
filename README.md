@@ -1,4 +1,4 @@
-# llama.cpp
+# llama.zero
 
 ![llama](https://user-images.githubusercontent.com/1991296/230134379-7181e485-c521-4d23-a0d6-f7b3b61ba524.png)
 
@@ -8,6 +8,30 @@
 [Roadmap](https://github.com/users/ggerganov/projects/7) / [Project status](https://github.com/ggerganov/llama.cpp/discussions/3471) / [Manifesto](https://github.com/ggerganov/llama.cpp/discussions/205) / [ggml](https://github.com/ggerganov/ggml)
 
 Inference of Meta's [LLaMA](https://arxiv.org/abs/2302.13971) model (and others) in pure C/C++
+
+## How to set up Llama.zero on Pi Zero as USB device
+
+### USB Module Setup
+1. Add dwc2 device tree overlay
+```bash
+# This gets appended to /boot/config.txt
+echo "dtoverlay=dwc2" | sudo tee -a /boot/config.txt
+```
+2. In /boot/cmdline.txt, insert **modules-load=dwc2,g_multi** after root_wait.
+3. Create image file for USB mass storage
+```bash
+dd if=/dev/zero of=/llamazero.img bs=1M count=64
+mkfs.vfat /llamazero.img
+```
+4. Create mount directory
+```bash
+mkdir /mnt/llamazero
+sudo mount /llamazero.img /mnt/llamazero
+```
+5. Enable USB kernel module
+```
+modprobe g_multi file=/piusb.img cdrom=0 ro=0
+```
 
 ## Recent API changes
 
