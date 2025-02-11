@@ -73,9 +73,7 @@ function(ggml_add_cpu_backend_variant_impl tag_name)
     endif()
 
     if (CMAKE_OSX_ARCHITECTURES      STREQUAL "arm64" OR
-        CMAKE_GENERATOR_PLATFORM_LWR STREQUAL "arm64" OR
-        (NOT CMAKE_OSX_ARCHITECTURES AND NOT CMAKE_GENERATOR_PLATFORM_LWR AND
-            CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm.*|ARM64)$"))
+        CMAKE_GENERATOR_PLATFORM_LWR STREQUAL "arm64")
 
         message(STATUS "ARM detected")
 
