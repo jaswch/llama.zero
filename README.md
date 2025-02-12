@@ -43,7 +43,7 @@ sudo sed -i '/exit 0/i modprobe g_multi file=/llamazero.img cdrom=0 ro=0' /etc/r
 ```
 
 #### Useful commands
-```
+```bash
 # Unmount fs
 sudo umount /mnt/llamazero
 # Mount fs
@@ -53,6 +53,23 @@ sudo modprobe g_multi file=/llamazero.img cdrom=0 ro=0
 # Unmount usb
 sudo modprobe g_multi -r
 ```
+### Behavior
+
+To check for new files created on computer, we:
+
+```bash
+sudo umount /mnt/llamazero
+sudo mount /llamazero.img /mnt/llamazero
+sudo ls /mnt/llamazero
+```
+
+To show for new edits created on pi, mount and unmount usb module:
+```bash
+# While the file system folder is mounted
+sudo modprobe -r g_multi
+sudo modprobe g_multi file=/llamazero.img cdrom=0 ro=0
+```
+
 ### Memory set-up for llama.cpp
 Allocate memory for llama.cpp compilation
 ```bash
