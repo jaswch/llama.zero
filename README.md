@@ -109,6 +109,23 @@ sudo swapon /swapfile
 ```
 ### Compile llama.cpp
 
+1. Install dependencies
+```bash
+sudo apt install -y git cmake ccache libpthread-stubs0-dev build-essential
+```
+2. Clone this repo
+```bash
+git clone https://github.com/pham-tuan-binh/llama.zero.git
+cd llama.zero
+```
+3. Build
+This will take a very long time. My first successful compilation took 24 hours, no cap, but it was because I had some errors. Hopefully yours wont.
+```bash
+cmake -B build
+cmake --build build --config Release
+```
+4. Test
+
 ## Recent API changes
 
 - [Changelog for `libllama` API](https://github.com/ggerganov/llama.cpp/issues/9289)
