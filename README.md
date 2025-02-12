@@ -70,6 +70,35 @@ sudo modprobe -r g_multi
 sudo modprobe g_multi file=/llamazero.img cdrom=0 ro=0
 ```
 
+### Auto-updater script
+```bash
+#!/bin/bash
+
+MOUNT_POINT=/mnt/llamazero
+IMG_FILE=/llamazero.img
+
+while true; do
+    # Unmount and mount to detect new files from computer
+    sudo umount $MOUNT_POINT
+    sudo mount $IMG_FILE $MOUNT_POINT
+    
+    # Check for empty files and append "hello"
+    for file in $(sudo find $MOUNT_POINT -type f -empty); do
+	echo "Processing file: $(basename "$file")"
+    	echo "$file" | sudo tee -a "$file" > /dev/null
+	sleep 1
+        # Unmount and remount USB gadget to show changes
+	echo "Unmount usb"
+        sudo modprobe -r g_multi
+	sleep 1
+	echo "Mount USB"
+        sudo modprobe g_multi file=$IMG_FILE cdrom=0 ro=0
+    done
+    
+    sleep 2  # Adjust sleep time as needed
+done
+```
+
 ### Memory set-up for llama.cpp
 Allocate memory for llama.cpp compilation
 ```bash
