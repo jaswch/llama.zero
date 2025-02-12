@@ -35,7 +35,7 @@ sudo mount /llamazero.img /mnt/llamazero
 ```
 5. Enable USB kernel module
 ```bash
-sudo modprobe g_multi file=/piusb.img cdrom=0 ro=0
+sudo modprobe g_multi file=/llamazero.img cdrom=0 ro=0
 ```
 6. Add mount command to rc.local, so system auto mount when pi starts.
 ```bash
