@@ -12,26 +12,44 @@ Inference of Meta's [LLaMA](https://arxiv.org/abs/2302.13971) model (and others)
 ## How to set up Llama.zero on Pi Zero as USB device
 
 ### USB Module Setup
+Reference can be found [here](https://gist.github.com/gbaman/50b6cca61dd1c3f88f41)
+
 1. Add dwc2 device tree overlay
 ```bash
 # This gets appended to /boot/config.txt
 echo "dtoverlay=dwc2" | sudo tee -a /boot/config.txt
 ```
 2. In /boot/cmdline.txt, insert **modules-load=dwc2,g_multi** after root_wait.
-3. Create image file for USB mass storage
 ```bash
-dd if=/dev/zero of=/llamazero.img bs=1M count=64
-mkfs.vfat /llamazero.img
+sudo sed -i 's/rootwait/rootwait modules-load=dwc2,g_multi/' /boot/cmdline.txt
+```
+4. Create image file for USB mass storage
+```bash
+sudo dd if=/dev/zero of=/llamazero.img bs=1M count=64
+sudo mkfs.vfat /llamazero.img
 ```
 4. Create mount directory
 ```bash
-mkdir /mnt/llamazero
+sudo mkdir /mnt/llamazero
 sudo mount /llamazero.img /mnt/llamazero
 ```
 5. Enable USB kernel module
+```bash
+sudo modprobe g_multi file=/piusb.img cdrom=0 ro=0
 ```
-modprobe g_multi file=/piusb.img cdrom=0 ro=0
+6. Add mount command to rc.local, so system auto mount when pi starts.
+```bash
+sudo sed -i '/exit 0/i modprobe g_multi file=/llamazero.img cdrom=0 ro=0' /etc/rc.local
 ```
+### Memory set-up for llama.cpp
+Allocate memory for llama.cpp compilation
+```bash
+sudo fallocate -l 4G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+```
+### Compile llama.cpp
 
 ## Recent API changes
 
