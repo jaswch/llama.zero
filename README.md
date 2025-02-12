@@ -124,8 +124,46 @@ This will take a very long time. My first successful compilation took 24 hours, 
 cmake -B build
 cmake --build build --config Release
 ```
-4. Test
+4. Add to path
+```bash
+echo 'export PATH=$PATH:~/llama.zero/build/bin/' >> ~/.bashrc
+```
+5. Test run
+You can test any model you want, as long as they are <512MB and is in gguf format.
+```
+llama-cli -m model.gguf -p "The meaning of life is" -n 16 2> /dev/null
+```
+### Auto fill in USB file script
+Make this script into a systemctl service so that it is run whenever you plug in your pi.
+```bash
+#!/bin/bash
 
+MOUNT_POINT=/mnt/llamazero
+IMG_FILE=/llamazero.img
+
+while true; do
+    # Unmount and mount to detect new files from computer
+    sudo umount $MOUNT_POINT
+    sudo mount $IMG_FILE $MOUNT_POINT
+
+    # Check for empty files and append "hello"
+    for file in $(sudo find $MOUNT_POINT -type f -empty); do
+        para=$(basename "$file")
+        echo "Processing file: $file"
+        llama-cli -n 16 -p "$para" -m ~/tiny-15M-Q4KM.gguf 2> /dev/null | sudo tee $file
+
+        sleep 1
+        # Unmount and remount USB gadget to show changes
+        echo "Unmount usb"
+        sudo modprobe -r g_multi
+        sleep 1
+        echo "Mount USB"
+        sudo modprobe g_multi file=$IMG_FILE cdrom=0 ro=0
+    done
+
+    sleep 2  # Adjust sleep time as needed
+done
+```
 ## Recent API changes
 
 - [Changelog for `libllama` API](https://github.com/ggerganov/llama.cpp/issues/9289)
