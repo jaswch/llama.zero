@@ -41,6 +41,18 @@ sudo modprobe g_multi file=/llamazero.img cdrom=0 ro=0
 ```bash
 sudo sed -i '/exit 0/i modprobe g_multi file=/llamazero.img cdrom=0 ro=0' /etc/rc.local
 ```
+
+#### Useful commands
+```
+# Unmount fs
+sudo umount /mnt/llamazero
+# Mount fs
+sudo mount /llamazero.img /mnt/llamazero
+# Mount usb
+sudo modprobe g_multi file=/llamazero.img cdrom=0 ro=0
+# Unmount usb
+sudo modprobe g_multi -r
+```
 ### Memory set-up for llama.cpp
 Allocate memory for llama.cpp compilation
 ```bash
