@@ -159,3 +159,7 @@ while true; do
     sleep 2  # Adjust sleep time as needed
 done
 ```
+## Tested models
+1. [Tiny-15M](https://huggingface.co/tensorblock/tinyllama-15M-stories-GGUF/blob/227c5a5ad3c1a830901543cf9959c53572014a68/tinyllama-15M-stories-Q4_K_M.gguf) :- 223ms/token 
+2. [Lamini-T5-Flan-77M](https://huggingface.co/Felladrin/gguf-LaMini-Flan-T5-77M/blob/main/LaMini-Flan-T5-77M.Q4_K_M.gguf) :- 2.5s/token
+3. [SmolLM2-136M](https://huggingface.co/QuantFactory/SmolLM2-135M-GGUF/blob/main/SmolLM2-135M.Q4_K_M.gguf) :- 2.2s/token
